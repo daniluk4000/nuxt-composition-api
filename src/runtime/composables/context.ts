@@ -53,6 +53,23 @@ export function callWithContext<T extends (...args: any[]) => any>(
 }
 
 /**
+ * Ensures that the setup function passed in has access to the Nuxt instance via `useContext`.
+ *
+ * @param context useContext response
+ * @param setup The function to call
+ * @param args Function's arguments
+ */
+export function callWithContextSync<T extends (...args: any[]) => any>(
+  context: UseContextReturn,
+  setup: T,
+  args?: Parameters<T>
+) {
+  const fn: () => ReturnType<T> = () =>
+    args ? setup(...(args as Parameters<T>)) : setup()
+  return nuxtCtx.call(context, fn)
+}
+
+/**
  * `useContext` will return the Nuxt context.
  * @example
   ```ts
